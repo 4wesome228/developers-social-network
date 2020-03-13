@@ -19,17 +19,37 @@ module.exports = {
         test: /\.tsx|ts$/,
         loader: "awesome-typescript-loader",
         exclude: [/node_modules/]
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.(gif|png|jpe?g|svg)$/i,
+        use: [
+          "file-loader",
+          {
+            loader: "image-webpack-loader",
+            options: {
+              mozjpeg: {
+                progressive: true,
+                quality: 65
+              }
+            }
+          }
+        ]
       }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/public/index.html",
       inject: "body"
     })
   ],
   devServer: {
     contentBase: "./src/public",
+    historyApiFallback: true,
     port: 8080
   }
 };
