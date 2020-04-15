@@ -6,7 +6,7 @@ import { IFormData, connector, PropsFromRedux } from "./types";
 const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
   const {
     match: { path },
-    setAlert,
+    thunkSetAlert,
   } = props;
 
   const isLogin = path === "/login";
@@ -37,7 +37,7 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (password !== repeated_password) {
-      setAlert("Passwords do not match", "danger");
+      thunkSetAlert("Passwords do not match", "danger");
     } else {
       console.log(formData);
     }

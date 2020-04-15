@@ -1,14 +1,14 @@
-import { ISetAlert } from "./../../store/actions/types";
-import { setAlert } from "../../store/actions/alertActions";
+import { thunkSetAlert } from "./../../store/actions/alertActions";
+import { AppThunk } from "./../../store/actions/types";
 
 import { connect, ConnectedProps } from "react-redux";
 
 interface dispatchType {
-  setAlert: (msg: string, alertType: string) => ISetAlert;
+  thunkSetAlert: (msg: string, alertType: string) => AppThunk;
 }
 
 const mapDispatchToProps: dispatchType = {
-  setAlert,
+  thunkSetAlert,
 };
 
 export const connector = connect(null, mapDispatchToProps);
