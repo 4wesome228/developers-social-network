@@ -20,5 +20,39 @@ export interface IRemoveAlert {
   payload: string;
 }
 
+export const FETCH_REGISTER_REQUEST = "FETCH_REGISTER_REQUEST";
+export const FETCH_REGISTER_SUCCESS = "FETCH_REGISTER_SUCCESS";
+export const FETCH_REGISTER_FAILURE = "FETCH_REGISTER_FAILURE";
+
+export interface IRegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface IRegisterToken {
+  token: string;
+}
+
+export interface IRegisterSuccess {
+  type: typeof FETCH_REGISTER_SUCCESS;
+  payload: string;
+}
+
+export interface IRegisterFailure {
+  type: typeof FETCH_REGISTER_FAILURE;
+  payload: string;
+}
+
+export interface IRegisterRequest {
+  type: typeof FETCH_REGISTER_REQUEST;
+}
+
+export type ActionTypes =
+  | ISetAlert
+  | IRemoveAlert
+  | IRegisterRequest
+  | IRegisterSuccess
+  | IRegisterFailure;
+
 export type AppThunk = ThunkAction<void, RootState, unknown, ActionTypes>;
-export type ActionTypes = ISetAlert | IRemoveAlert;

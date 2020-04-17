@@ -1,17 +1,14 @@
-import { RootState } from "./../reducers/index";
 import {
   SET_ALERT,
   ISetAlert,
   REMOVE_ALERT,
   IRemoveAlert,
-  ActionTypes,
+  AppThunk,
 } from "./types";
-import { ThunkAction } from "redux-thunk";
 
-export const thunkSetAlert = (
-  msg: string,
-  alertType: string
-): ThunkAction<void, RootState, unknown, ActionTypes> => (dispatch) => {
+export const thunkSetAlert = (msg: string, alertType: string): AppThunk => (
+  dispatch
+) => {
   const id = Date.now().toString();
   dispatch(setAlert(msg, alertType, id));
   setTimeout(() => dispatch(removeAlert(id)), 3000);

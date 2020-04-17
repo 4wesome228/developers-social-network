@@ -11,6 +11,6 @@ export const mapStateToProps = (state: RootState): IMapState => ({
   alerts: state.alerts,
 });
 
-export const connector = connect(mapStateToProps);
+export const connector = connect(mapStateToProps, null);
 
 export type PropsFromRedux = ConnectedProps<typeof connector>;

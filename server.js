@@ -6,10 +6,6 @@ connectDB();
 
 app.use(express.json({ extended: false }));
 
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
-
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/auth", require("./routes/api/auth"));

@@ -1,7 +1,7 @@
 import React from "react";
 import { PropsFromRedux, connector } from "./types";
 
-const Alert = ({ alerts }: PropsFromRedux) => {
+const Alert: React.FC<PropsFromRedux> = ({ alerts }) => {
   return (
     alerts.length > 0 && (
       <>

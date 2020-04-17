@@ -7,6 +7,7 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
   const {
     match: { path },
     thunkSetAlert,
+    register,
   } = props;
 
   const isLogin = path === "/login";
@@ -39,7 +40,8 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
     if (password !== repeated_password) {
       thunkSetAlert("Passwords do not match", "danger");
     } else {
-      console.log(formData);
+      const { name, email, password } = formData;
+      register({ name, email, password });
     }
   };
 
