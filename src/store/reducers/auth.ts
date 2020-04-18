@@ -1,9 +1,4 @@
-import {
-  FETCH_REGISTER_REQUEST,
-  FETCH_REGISTER_SUCCESS,
-  FETCH_REGISTER_FAILURE,
-  ActionTypes,
-} from "./../actions/types";
+import { AuthActionTypes } from "store/actions/auth";
 
 interface IAuthState {
   isAuth: boolean;
@@ -21,14 +16,14 @@ const initialState: IAuthState = {
   user: null,
 };
 
-export const authReducer = (state = initialState, action: ActionTypes) => {
+export const authReducer = (state = initialState, action: AuthActionTypes) => {
   switch (action.type) {
-    case FETCH_REGISTER_REQUEST:
+    case "FETCH_REGISTER_REQUEST":
       return { ...state, loading: true };
-    case FETCH_REGISTER_SUCCESS:
+    case "FETCH_REGISTER_SUCCESS":
       localStorage.setItem("token", action.payload);
       return { ...state, isAuth: true, loading: false, token: action.payload };
-    case FETCH_REGISTER_FAILURE:
+    case "FETCH_REGISTER_FAILURE":
       localStorage.removeItem("token");
       return {
         ...state,

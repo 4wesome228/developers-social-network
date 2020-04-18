@@ -1,20 +1,18 @@
 import axios from "axios";
 import {
-  IRegisterPayload,
   AppThunk,
+  PropertiesTypes,
+  IRegisterPayload,
   IRegisterToken,
-  FETCH_REGISTER_REQUEST,
-  FETCH_REGISTER_SUCCESS,
-  FETCH_REGISTER_FAILURE,
 } from "./types";
 
-import { thunkSetAlert } from "./alertActions";
+import { thunkSetAlert } from "./alert";
 
 export const register = ({
   name,
   email,
   password,
-}: IRegisterPayload): AppThunk => async (dispatch) => {
+}: IRegisterPayload): AppThunk<AuthActionTypes> => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -23,9 +21,9 @@ export const register = ({
   const data = JSON.stringify({ name, email, password });
 
   try {
-    dispatch({ type: FETCH_REGISTER_REQUEST });
+    dispatch(actions.registerRequest());
     const res = await axios.post<IRegisterToken>("/api/users", data, config);
-    dispatch({ type: FETCH_REGISTER_SUCCESS, payload: res.data.token });
+    dispatch(actions.registerSuccess(res.data.token));
   } catch (error) {
     console.log(error.message);
     debugger;
@@ -34,6 +32,16 @@ export const register = ({
       dispatch(thunkSetAlert(error.msg, "danger"));
     });
 
-    dispatch({ type: FETCH_REGISTER_FAILURE, payload: error.message });
+    dispatch(actions.registerFail(error.message));
   }
 };
+
+const actions = {
+  registerRequest: () => ({ type: "FETCH_REGISTER_REQUEST" } as const),
+  registerSuccess: (token: string) =>
+    ({ type: "FETCH_REGISTER_SUCCESS", payload: token } as const),
+  registerFail: (error: string) =>
+    ({ type: "FETCH_REGISTER_FAILURE", payload: error } as const),
+};
+
+export type AuthActionTypes = ReturnType<PropertiesTypes<typeof actions>>;

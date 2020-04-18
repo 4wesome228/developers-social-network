@@ -1,12 +1,12 @@
-import { register } from "./../../store/actions/auth";
-import { thunkSetAlert } from "./../../store/actions/alertActions";
+import { register, AuthActionTypes } from "./../../store/actions/auth";
+import { thunkSetAlert } from "../../store/actions/alert";
 import { AppThunk } from "./../../store/actions/types";
 
 import { connect, ConnectedProps } from "react-redux";
 
 interface dispatchType {
-  thunkSetAlert: (msg: string, alertType: string) => AppThunk;
-  register: (object) => AppThunk;
+  thunkSetAlert: (msg: string, alertType: string) => AppThunk<AuthActionTypes>;
+  register: (object) => AppThunk<AuthActionTypes>;
 }
 
 const mapDispatchToProps: dispatchType = {
