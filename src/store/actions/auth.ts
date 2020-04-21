@@ -44,4 +44,4 @@ const actions = {
     ({ type: "FETCH_REGISTER_FAILURE", payload: error } as const),
 };
 
-export type AuthActionTypes = ReturnType<PropertiesTypes<typeof actions>>;
+export type AuthActionTypes = PropertiesTypes<typeof actions>;

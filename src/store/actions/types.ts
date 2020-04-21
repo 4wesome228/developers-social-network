@@ -24,6 +24,8 @@ export type AppThunk<T extends Action> = ThunkAction<
   unknown,
   T
 >;
-export type PropertiesTypes<T> = T extends { [key: string]: infer R }
+export type PropertiesTypes<T> = T extends {
+  [key: string]: (...args: any[]) => infer R;
+}
   ? R
   : never;

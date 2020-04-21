@@ -24,4 +24,4 @@ const actions = {
 
 export default actions.setAlert;
 
-export type AlertActionsTypes = ReturnType<PropertiesTypes<typeof actions>>;
+export type AlertActionsTypes = PropertiesTypes<typeof actions>;

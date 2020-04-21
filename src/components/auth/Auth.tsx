@@ -2,22 +2,27 @@ import React from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 
 import { IFormData, connector, PropsFromRedux } from "./types";
+import Spinner from "../spinner/Spinner";
+import fieldsConfig from "../../utils/fields";
 
 const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
   const {
     match: { path },
     thunkSetAlert,
     register,
+    loading,
   } = props;
 
   const isLogin = path === "/login";
   const pageTitle = isLogin ? "Sign In" : "Sign Up";
   const subTitle = isLogin ? "Sign into your account" : "Create an account";
-  const subTitleText = isLogin
+  const subtitleText = isLogin
     ? "Need an account?"
     : "Already have an account?";
   const subTitleLink = isLogin ? "/register" : "/login";
-  //const apiUrl = isLogin ? "/users/login" : "/users";
+  const currentFieldsConfig = isLogin
+    ? [fieldsConfig.email, fieldsConfig.password]
+    : Object.values(fieldsConfig);
 
   const [formData, setFormData] = React.useState<IFormData>({
     name: "",
@@ -26,7 +31,7 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
     repeated_password: "",
   });
 
-  const { password, repeated_password }: IFormData = formData;
+  const { name, email, password, repeated_password }: IFormData = formData;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({
@@ -37,10 +42,10 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
     if (password !== repeated_password) {
       thunkSetAlert("Passwords do not match", "danger");
     } else {
-      const { name, email, password } = formData;
       register({ name, email, password });
     }
   };
@@ -56,12 +61,22 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
           type={type}
           placeholder={placeholder}
           name={name}
-          required
           onChange={handleChange}
         />
       </div>
     );
   };
+
+  const renderFiels = (config, fieldsLength) => {
+    return config.map((i) => {
+      return renderField(i.type, i.placeholder, i.name);
+    });
+  };
+
+  const fields = renderFiels(
+    currentFieldsConfig,
+    Object.keys(currentFieldsConfig).length
+  );
 
   return (
     <>
@@ -70,15 +85,17 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
         <i className="fas fa-user"></i> {subTitle}
       </p>
       <form className="form" onSubmit={handleSubmit}>
-        {!isLogin && renderField("text", "Name", "name")}
-        {renderField("email", "Email Address", "email")}
-        {renderField("password", "Password", "password")}
-        {!isLogin &&
-          renderField("password", "Confirm Password", "repeated_password")}
-        <input type="submit" className="btn btn-primary" />
+        {fields}
+        {!loading ? (
+          <button type="submit" className="btn btn-primary">
+            Register
+          </button>
+        ) : (
+          <Spinner />
+        )}
       </form>
       <p className="my-1">
-        {subTitleText}{" "}
+        {subtitleText}{" "}
         <Link to={subTitleLink}>{isLogin ? "Sign up" : "Sign in"}</Link>
       </p>
     </>
