@@ -4,7 +4,9 @@ export const thunkSetAlert = (
   msg: string,
   alertType: string
 ): AppThunk<AlertActionsTypes> => (dispatch) => {
-  const id = Date.now().toString();
+  const id = (
+    new Date().valueOf() * Math.round(Math.random() * 10000)
+  ).toString();
   dispatch(actions.setAlert(msg, alertType, id));
   setTimeout(() => dispatch(actions.removeAlert(id)), 3000);
 };

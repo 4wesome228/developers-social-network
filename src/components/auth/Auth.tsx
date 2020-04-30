@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { RouteComponentProps, Link, Redirect } from "react-router-dom";
 
 import { IFormData, connector, PropsFromRedux } from "./types";
 import Spinner from "../spinner/Spinner";
@@ -11,6 +11,8 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
     thunkSetAlert,
     register,
     loading,
+    isAuth,
+    login,
   } = props;
 
   const isLogin = path === "/login";
@@ -42,41 +44,54 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    if (password !== repeated_password) {
+    if (password !== repeated_password && !isLogin) {
       thunkSetAlert("Passwords do not match", "danger");
     } else {
-      register({ name, email, password });
+      /*else if (Object.keys(formData).some((k) => formData[k] == "")) {
+      for (let key in formData) {
+        if (formData[key] === "") {
+          thunkSetAlert(`${key} can't be empty`, "danger");
+        }
+      }
+    }*/
+      !isLogin
+        ? register({ name, email, password })
+        : login({ email, password });
     }
   };
 
   const renderField = (
     type: string,
     placeholder: string,
-    name: string
-  ): React.ReactNode => {
+    name: string,
+    label: string
+  ) => {
     return (
-      <div className="form-group">
+      <div className="form-group" key={name}>
+        <label className="form-label" htmlFor={`${name}-input`}>
+          {label}:
+        </label>
         <input
+          id={`${name}-input`}
           type={type}
           placeholder={placeholder}
           name={name}
           onChange={handleChange}
+          required
         />
       </div>
     );
   };
 
-  const renderFiels = (config, fieldsLength) => {
-    return config.map((i) => {
-      return renderField(i.type, i.placeholder, i.name);
-    });
+  const renderFiels = (config) => {
+    return config.map((i) =>
+      renderField(i.type, i.placeholder, i.name, i.label)
+    );
   };
 
-  const fields = renderFiels(
-    currentFieldsConfig,
-    Object.keys(currentFieldsConfig).length
-  );
+  const fields = renderFiels(currentFieldsConfig);
+
+  if (isAuth) return <Redirect to={"/"} />;
 
   return (
     <>
@@ -88,7 +103,7 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
         {fields}
         {!loading ? (
           <button type="submit" className="btn btn-primary">
-            Register
+            {isLogin ? "Login" : "Register"}
           </button>
         ) : (
           <Spinner />

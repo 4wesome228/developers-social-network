@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./App.css";
@@ -6,27 +6,38 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Alert from "./components/alert/alert";
 import Auth from "./components/auth/Auth";
-import { Provider } from "react-redux";
-import store from "./store";
+import { connect, ConnectedProps } from "react-redux";
 
-const App: React.FC = () => {
+import { loadUserThunk } from "./store/actions/auth";
+import setToken from "./utils/setAuthToken";
+
+if (localStorage.token) setToken(localStorage.token);
+
+const App: React.FC<Props> = (props) => {
+  useEffect(() => {
+    props.loadUserThunk();
+  }, []);
   return (
-    <Provider store={store}>
-      <Router>
-        <>
-          <Navbar />
-          <Route path="/" exact component={Landing} />
-          <section className="container">
-            <Alert />
-            <Switch>
-              <Route path="/register" component={Auth} />
-              <Route path="/login" component={Auth} />
-            </Switch>
-          </section>
-        </>
-      </Router>
-    </Provider>
+    <Router>
+      <>
+        <Navbar />
+        <Route path="/" exact component={Landing} />
+        <section className="container">
+          <Alert />
+          <Switch>
+            <Route path="/register" component={Auth} />
+            <Route path="/login" component={Auth} />
+          </Switch>
+        </section>
+      </>
+    </Router>
   );
 };
 
-export default App;
+const mapDispatchToProps = {
+  loadUserThunk,
+};
+
+const connector = connect(null, mapDispatchToProps);
+type Props = ConnectedProps<typeof connector>;
+export default connector(App);
