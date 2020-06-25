@@ -3,16 +3,30 @@ import { Link } from "react-router-dom";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { logout } from "../../store/actions/auth";
+import { clearProfile } from "../../store/actions/profile";
 
-const Navbar: React.FC<Props> = (props) => {
-  const { loading, isAuth, logout } = props;
+const Navbar: React.FC<Props> = ({ loading, isAuth, logout, clearProfile }) => {
+  const path = isAuth ? "/dashboard" : "/";
+
   const authLinks = (
     <ul>
       <li>
-        <a onClick={logout} href="#">
-          <i className="fas fa-sign-out-alt"> </i>
+        <Link to="/dashboard">
+          <i className="fas fa-user">&#160;</i>
+          <span className="hide-sm">Dashboard</span>
+        </Link>
+      </li>
+      <li>
+        <Link
+          onClick={() => {
+            logout();
+            clearProfile();
+          }}
+          to="/"
+        >
+          <i className="fas fa-sign-out-alt">&#160;</i>
           <span className="hide-sm">Logout</span>
-        </a>
+        </Link>
       </li>
     </ul>
   );
@@ -34,7 +48,7 @@ const Navbar: React.FC<Props> = (props) => {
   return (
     <nav className="navbar bg-dark">
       <h1>
-        <Link to="/">
+        <Link to={path}>
           <i className="fas fa-code"></i> DevConnector
         </Link>
       </h1>
@@ -52,6 +66,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = {
   logout,
+  clearProfile,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

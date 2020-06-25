@@ -1,7 +1,11 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { RootState } from "../../store/reducers";
+import { connect } from "react-redux";
 
-const Landing: React.FC = () => {
+const Landing: React.FC<MapState> = ({ isAuth }) => {
+  if (isAuth) return <Redirect to="/dashboard" />;
+
   return (
     <section className="landing">
       <div className="dark-overlay">
@@ -25,4 +29,12 @@ const Landing: React.FC = () => {
   );
 };
 
-export default Landing;
+const mapStateToProps = (state: RootState) => {
+  return {
+    isAuth: state.auth.isAuth,
+  };
+};
+
+type MapState = ReturnType<typeof mapStateToProps>;
+
+export default connect<MapState>(mapStateToProps)(Landing);

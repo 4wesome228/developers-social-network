@@ -13,12 +13,13 @@ router.get("/me", auth, async (req, res) => {
     const profile = await Profile.findOne({
       user: req.user.id
     }).populate("user", ["name", "avatar"]);
+    //const {company,bio,status,skills,website,location,social}=profile;
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
-
-    res.json(profile);
+    //profileRecords:{company,bio,status,skills:skills.join(),website,location,social}
+    res.json({me:profile});
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -47,14 +48,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      company,
-      website,
-      location,
-      bio,
-      status,
-      githubusername,
-      skills,
+    const {     
       youtube,
       facebook,
       twitter,
@@ -65,17 +59,16 @@ router.post(
     const profileFields = {};
     //id from req which comes from middleware
     profileFields.user = req.user.id;
-    if (company) profileFields.company = company;
-    if (website) profileFields.website = website;
-    if (location) profileFields.location = location;
-    if (bio) profileFields.bio = bio;
-    if (status) profileFields.status = status;
-    if (githubusername) profileFields.githubusername = githubusername;
-    if (skills) {
-      profileFields.skills = skills.split(",").map(skill => skill.trim());
-    }
 
-    profileFields.social = {};
+    for ( let [key,value] of Object.entries(req.body)) {
+      if(key==="skills") profileFields[key] = value.split(",").map(skill => skill.trim());
+      else profileFields[key]=value;
+    }   
+  
+
+   profileFields.social = {};
+
+   
     if (youtube) profileFields.social.youtube = youtube;
     if (twitter) profileFields.social.twitter = twitter;
     if (facebook) profileFields.social.facebook = facebook;
@@ -84,7 +77,7 @@ router.post(
 
     try {
       let profile = await Profile.findOne({ user: req.user.id });
-      console.log(profile);
+     
 
       if (profile) {
         profile = await Profile.findOneAndUpdate(
@@ -93,12 +86,12 @@ router.post(
           { new: true }
         );
 
-        return res.json(profile);
+        return res.json(profileFields);
       }
 
       profile = new Profile(profileFields);
       await profile.save();
-      res.json(profile);
+      res.json(profileFields);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server Error");
@@ -175,7 +168,7 @@ router.put(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const newExperience = Object.assign({}, req.body);
@@ -236,7 +229,7 @@ router.put(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     const newEducation = Object.assign({}, req.body);

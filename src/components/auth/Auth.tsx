@@ -3,18 +3,16 @@ import { RouteComponentProps, Link, Redirect } from "react-router-dom";
 
 import { IFormData, connector, PropsFromRedux } from "./types";
 import Spinner from "../spinner/Spinner";
-import fieldsConfig from "../../utils/fields";
+import fieldsConfig from "../../utils/auth-fields";
 
-const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
-  const {
-    match: { path },
-    thunkSetAlert,
-    register,
-    loading,
-    isAuth,
-    login,
-  } = props;
-
+const Auth: React.FC<RouteComponentProps & PropsFromRedux> = ({
+  match: { path },
+  thunkSetAlert,
+  register,
+  loading,
+  isAuth,
+  login,
+}) => {
   const isLogin = path === "/login";
   const pageTitle = isLogin ? "Sign In" : "Sign Up";
   const subTitle = isLogin ? "Sign into your account" : "Create an account";
@@ -91,7 +89,7 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = (props) => {
 
   const fields = renderFiels(currentFieldsConfig);
 
-  if (isAuth) return <Redirect to={"/"} />;
+  if (isAuth) return <Redirect to="/dashboard" />;
 
   return (
     <>

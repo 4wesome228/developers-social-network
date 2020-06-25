@@ -48,6 +48,7 @@ module.exports = {
     })
   ],
   devServer: {
+    writeToDisk:true,
     contentBase: "./src/public",
     historyApiFallback: true,
     port: 8080,

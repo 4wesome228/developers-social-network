@@ -1,7 +1,6 @@
 import { RootState } from "./../../store/reducers/index";
-import { register, AuthActionTypes } from "./../../store/actions/auth";
+import { register } from "./../../store/actions/auth";
 import { thunkSetAlert } from "../../store/actions/alert";
-import { AppThunk } from "./../../store/actions/types";
 
 import { connect, ConnectedProps } from "react-redux";
 import { login } from "../../store/actions/auth";
@@ -11,13 +10,7 @@ const mapStateToProps = (state: RootState) => ({
   isAuth: state.auth.isAuth,
 });
 
-interface IMapDispatch {
-  thunkSetAlert: (msg: string, alertType: string) => AppThunk<AuthActionTypes>;
-  register: (object) => AppThunk<AuthActionTypes>;
-  login: (object) => AppThunk<AuthActionTypes>;
-}
-
-const mapDispatchToProps: IMapDispatch = {
+const mapDispatchToProps = {
   thunkSetAlert,
   register,
   login,

@@ -52,7 +52,8 @@ img {
   height: 0;
   box-sizing: border-box;
   border: 32px solid var(--primary-color);
-  border-color: var(--primary-color)transparent var(--primary-color) transparent;
+  border-color: var(--primary-color) transparent var(--primary-color)
+    transparent;
   animation: lds-hourglass 1.2s infinite;
 }
 
@@ -203,39 +204,108 @@ img {
 }
 
 .alert {
-  padding: 0.8rem;
-  margin: 1rem 0;
-  opacity: 0.9;
+  padding: 0.7rem;
   background: var(--light-color);
   color: #333;
+  position: fixed;
+  right: 50px;
+  border-radius: 5px;
 }
 
-.btn-primary, .bg-primary, .badge-primary, .alert-primary {
+.alert:nth-child(1) {
+  bottom: 2%;
+}
+
+.alert:nth-child(2) {
+  bottom: 8%;
+}
+
+.alert:nth-child(3) {
+  bottom: 14%;
+}
+
+.alert:nth-child(4) {
+  bottom: 20%;
+}
+
+.alert:nth-child(n + 5) {
+  display: none;
+}
+
+.alert-input__close {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-progress-appearance: none;
+  transform: scale(1.2);
+  padding-left: 1rem;
+  outline: none;
+  color: white;
+}
+
+.alert-transition-enter {
+  opacity: 0;
+  transform: translateX(300px);
+}
+
+.alert-transition-enter.alert-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0px);
+  transition: all 300ms ease-in;
+}
+
+.alert-transition-exit {
+  opacity: 1;
+}
+
+.alert-transition-exit.alert-transition-exit-active {
+  opacity: 0;
+  transition: all 300ms ease-in;
+}
+
+.btn-primary,
+.bg-primary,
+.badge-primary,
+.alert-primary {
   background: var(--primary-color);
   color: #fff;
 }
 
-.btn-light, .bg-light, .badge-light, .alert-light {
+.btn-light,
+.bg-light,
+.badge-light,
+.alert-light {
   background: var(--light-color);
   color: #333;
 }
 
-.btn-dark, .bg-dark, .badge-dark, .alert-dark {
+.btn-dark,
+.bg-dark,
+.badge-dark,
+.alert-dark {
   background: var(--dark-color);
   color: #fff;
 }
 
-.btn-danger, .bg-danger, .badge-danger, .alert-danger {
+.btn-danger,
+.bg-danger,
+.badge-danger,
+.alert-danger {
   background: var(--danger-color);
   color: #fff;
 }
 
-.btn-success, .bg-success, .badge-success, .alert-success {
+.btn-success,
+.bg-success,
+.badge-success,
+.alert-success {
   background: var(--success-color);
   color: #fff;
 }
 
-.btn-white, .bg-white, .badge-white, .alert-white {
+.btn-white,
+.bg-white,
+.badge-white,
+.alert-white {
   background: #fff;
   color: #333;
   border: #ccc solid 1px;
@@ -245,7 +315,8 @@ img {
   opacity: 0.8;
 }
 
-.bg-light, .badge-light {
+.bg-light,
+.badge-light {
   border: #ccc solid 1px;
 }
 
@@ -274,8 +345,6 @@ img {
 
 .form .form-group {
   margin: 1.2rem 0;
-  display: flex;
-  align-items: center;
 }
 
 .form-label {
@@ -289,16 +358,21 @@ img {
   color: #888;
 }
 
-.form input[type="text"], .form input[type="email"], .form input[type="password"], .form input[type="date"], .form select, .form textarea {
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="date"],
+.form select,
+.form textarea {
   display: block;
-  width: 80%;
-  padding: 0.4rem 0.4rem 0 0.4rem;
+  width: 100%;
+  padding: 0.4rem;
   font-size: 1.2rem;
-  border: none;
-  border-bottom: 1px solid var(--primary-color);
+  border: 1px solid #ccc;
 }
 
-.form input[type="submit"], button {
+.form input[type="submit"],
+button {
   font: inherit;
 }
 
@@ -331,7 +405,8 @@ img {
   color: #0077b5;
 }
 
-.table th, .table td {
+.table th,
+.table td {
   padding: 1rem;
   text-align: left;
 }
@@ -455,21 +530,25 @@ img {
   grid-area: edu;
 }
 
-.profile-exp h2, .profile-edu h2 {
+.profile-exp h2,
+.profile-edu h2 {
   margin-bottom: 1rem;
 }
 
-.profile-exp>div, .profile-edu>div {
+.profile-exp > div,
+.profile-edu > div {
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: #ccc 1px dotted;
 }
 
-.profile-exp>div:last-child, .profile-edu>div:last-child {
+.profile-exp > div:last-child,
+.profile-edu > div:last-child {
   border: 0;
 }
 
-.profile-exp p, .profile-edu p {
+.profile-exp p,
+.profile-edu p {
   margin: 0.5rem 0;
 }
 
@@ -481,12 +560,12 @@ img {
   display: flex;
 }
 
-.profile-github .repo>div:first-child {
+.profile-github .repo > div:first-child {
   flex: 7;
   flex-basis: 70%;
 }
 
-.profile-github>div:last-child {
+.profile-github > div:last-child {
   flex: 3;
   flex-basis: 20%;
 }
@@ -505,7 +584,7 @@ img {
   align-items: center;
 }
 
-.post>div:first-child {
+.post > div:first-child {
   text-align: center;
 }
 
@@ -570,7 +649,8 @@ img {
     display: none;
   }
   /* Profile Page */
-  .profile-top img, .profile img {
+  .profile-top img,
+  .profile img {
     width: 200px;
     margin: auto;
   }
@@ -588,7 +668,8 @@ img {
   .post {
     grid-template-columns: 1fr;
   }
-  .post a, .post button {
+  .post a,
+  .post button {
     padding: 0.3rem 0.4rem;
   }
 }

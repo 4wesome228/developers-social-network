@@ -20,7 +20,7 @@ router.post(
     check("email", "please include a valid email").isEmail(),
     check(
       "password",
-      "Please enter password with 6 or more chacarters"
+      "Please enter password with 6 or more characters"
     ).isLength({ min: 6 })
   ],
   async (req, res) => {

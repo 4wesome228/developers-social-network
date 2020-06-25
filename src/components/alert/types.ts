@@ -1,16 +1,12 @@
-import { IAlert } from "./../../store/actions/types";
 import { RootState } from "./../../store/reducers/index";
 
 import { connect, ConnectedProps } from "react-redux";
+import { removeAlert } from "../../store/actions/alert";
 
-export type IMapState = {
-  alerts: Array<IAlert>;
-};
-
-export const mapStateToProps = (state: RootState): IMapState => ({
+const mapStateToProps = (state: RootState) => ({
   alerts: state.alerts,
 });
 
-export const connector = connect(mapStateToProps, null);
+export const connector = connect(mapStateToProps, { removeAlert });
 
 export type PropsFromRedux = ConnectedProps<typeof connector>;

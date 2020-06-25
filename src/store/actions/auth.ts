@@ -93,5 +93,6 @@ const actions = {
 };
 
 export const logout = actions.logout;
+export const loginSuccess = actions.loginSuccess;
 
 export type AuthActionTypes = PropertiesTypes<typeof actions>;

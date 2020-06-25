@@ -1,5 +1,6 @@
 import { IUser } from "./../actions/types";
 import { AuthActionTypes } from "store/actions/auth";
+import setAuthToken from "../../utils/setAuthToken";
 
 interface IAuthState {
   isAuth: boolean;
@@ -11,7 +12,7 @@ interface IAuthState {
 
 const initialState: IAuthState = {
   isAuth: false,
-  loading: false,
+  loading: true,
   error: null,
   token: localStorage.getItem("token"),
   user: null,
@@ -28,6 +29,7 @@ export const authReducer = (
     case "FETCH_REGISTER_SUCCESS":
     case "FETCH_LOGIN_SUCCESS":
       localStorage.setItem("token", action.payload);
+      setAuthToken(action.payload);
       return { ...state, isAuth: true, loading: false, token: action.payload };
     case "FETCH_REGISTER_FAILURE":
     case "FETCH_LOGIN_FAILURE":
@@ -46,7 +48,7 @@ export const authReducer = (
     case "USER_LOADED":
       return {
         ...state,
-        isAuth: false,
+        isAuth: true,
         loading: false,
         user: action.payload,
       };
