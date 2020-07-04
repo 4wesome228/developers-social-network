@@ -1,8 +1,14 @@
 import { AppThunk, PropertiesTypes } from "./types";
 
+export enum ALERT_TYPE {
+  "gray" = "gray",
+  "success" = "success",
+  "danger" = "danger",
+}
+
 export const thunkSetAlert = (
   msg: string,
-  alertType: string
+  alertType: ALERT_TYPE
 ): AppThunk<AlertActionsTypes> => (dispatch) => {
   const id = (
     new Date().valueOf() * Math.round(Math.random() * 10000)

@@ -7,6 +7,7 @@ module.exports = {
   target: "web",
   entry: path.join(__dirname, "/src/index.tsx"),
   output: {
+    publicPath:"/",
     path: path.join(__dirname, "/dist"),
     filename: "bundle.js"
   },
@@ -43,7 +44,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/public/index.html",
+      template:"./src/public/index.html",
       inject: "body"
     })
   ],
@@ -53,7 +54,16 @@ module.exports = {
     historyApiFallback: true,
     port: 8080,
      proxy: {
-      "/api": "http://localhost:5000"
-    }
+      "/profile/api":{
+        target: "http://localhost:5000",
+        pathRewrite:{
+          "/profile":""
+        }
+      },
+      '/api': {
+        target: "http://localhost:5000",
+    },  
+     }
+      
   }
 };

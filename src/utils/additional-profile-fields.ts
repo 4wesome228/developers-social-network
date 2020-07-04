@@ -7,7 +7,7 @@ const data = {
       required: true,
     },
     company: {
-      name: "Company",
+      name: "company",
       type: "text",
       placeholder: "* Company",
       required: true,

@@ -11,7 +11,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["DOM"]
   },
   "exclude": ["node_modules"],
   "include": ["src/**/*.ts", "src/components/alert/alert.tsx"]

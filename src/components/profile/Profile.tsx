@@ -1,108 +1,89 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { ConnectedProps } from "react-redux";
+import { RouteChildrenProps, Link } from "react-router-dom";
+import { RootState } from "../../store/reducers";
+import { getProfileById } from "../../store/actions/profile";
+import Spinner from "../spinner/Spinner";
+import ProfileTop from "./ProfileTop";
+import ProfileAbout from "./ProfileAbout";
+import ProfileEducation from "./ProfileEducation";
+import ProfileExperience from "./ProfileExperience";
 
-import { FIELDS_TYPES, IProfileField } from "./types";
-import {
-  createProfileFields,
-  ProfileDataType,
-} from "../../utils/create-profile-fields";
+const Profile = ({
+  match,
+  getProfileById,
+  auth,
+  profile,
+  loading,
+  error,
+}: Props) => {
+  const id = match.params.id;
 
-import StatusRecord from "../profile-records/StatusRecord";
-import SocialRecord from "../profile-records/SocialRecord";
-import ProfileRecord from "../profile-records/ProfileRecord";
-import { withProfile } from "../HOC/withProfile";
+  useEffect(() => {
+    getProfileById(id);
+  }, []);
 
-type Props = {
-  isSocialsVisible: boolean;
-  changeSocialsVisibility: Dispatch<SetStateAction<boolean>>;
-  profileData: ProfileDataType;
-  handleSumbit: (e: any) => void;
-  handleChange: (e: any) => void;
-  pageHeadingText: string;
-};
-
-const Profile = (props: Props) => {
-  const {
-    handleChange,
-    handleSumbit,
-    changeSocialsVisibility,
-    isSocialsVisible,
-    profileData,
-    pageHeadingText,
-  } = props;
-
-  const renderFields = (
-    config: Array<IProfileField>,
-    type: FIELDS_TYPES,
-    onChange: typeof handleChange
-  ): React.ReactNode[] => {
-    return type === 1
-      ? config.map((field) => (
-          <ProfileRecord
-            key={field.name}
-            {...field}
-            description={field.description}
-            onRecordChange={onChange}
-            value={profileData[field.name]}
-            tag={field.tag || "input"}
-          />
-        ))
-      : config.map((field) => (
-          <SocialRecord
-            key={field.name}
-            {...field}
-            onRecordChange={onChange}
-            value={profileData[field.name]}
-          />
-        ));
-  };
-
-  const { socials, fields } = createProfileFields;
-
-  const profileInputFields = renderFields(
-    Object.values(fields),
-    FIELDS_TYPES.fields,
-    handleChange
-  );
-
-  const socialFields = renderFields(
-    Object.values(socials),
-    FIELDS_TYPES.socials,
-    handleChange
-  );
-
+  if ((loading || profile === null) && !error) return <Spinner />;
+  if (error)
+    return <p className="lead">Looks like there is no user with such id...</p>;
   return (
     <>
-      <h1 className="large text-primary">{pageHeadingText} your profile</h1>
-      <p className="lead">
-        <i className="fas fa-user"></i> Let's get some information to make your
-        profile stand out
-      </p>
-      <small>* = required field</small>
-      <form className="form" onSubmit={handleSumbit}>
-        <StatusRecord value={profileData.status} onChange={handleChange} />
-
-        {profileInputFields}
-
-        <div className="my-2">
-          <button
-            type="button"
-            className="btn btn-light"
-            onClick={() => changeSocialsVisibility(!isSocialsVisible)}
-          >
-            Add Social Network Links
-          </button>
-          <span>Optional</span>
-        </div>
-        {isSocialsVisible && socialFields}
-
-        <input type="submit" className="btn btn-primary my-1" />
-        <Link className="btn btn-light my-1" to="/dashboard">
-          Go Back
+      <Link to="/profiles" className="btn btn-light">
+        Back to profiles
+      </Link>
+      {auth.isAuth && !auth.loading && profile.user._id === auth.user._id && (
+        <Link className="btn btn-dark " to="/edit-profile">
+          Edit profile
         </Link>
-      </form>
+      )}
+      <div className="profile-grid my-1">
+        <ProfileTop profile={profile} />
+        <ProfileAbout profile={profile} />
+      </div>
+      <div className="profile-exp bg-white p-2">
+        <h2 className="text-primary">Experience</h2>
+        {profile.experience.length > 0 ? (
+          <>
+            {profile.experience.map((exp, idx) => (
+              <ProfileExperience key={idx} experience={exp} />
+            ))}
+          </>
+        ) : (
+          <p className="lead">
+            No experience info <i className="far fa-sad-tear"></i>
+          </p>
+        )}
+      </div>
+      <div className="profile-edu bg-white p-2">
+        <h2 className="text-primary">Education</h2>
+        {profile.education.length > 0 ? (
+          <>
+            {profile.education.map((edu, idx) => (
+              <ProfileEducation key={idx} education={edu} />
+            ))}
+          </>
+        ) : (
+          <p className="lead">
+            No education info <i className="far fa-sad-tear"></i>
+          </p>
+        )}
+      </div>
     </>
   );
 };
 
-export default withProfile(Profile);
+const mapStateToProps = (state: RootState) => {
+  return {
+    auth: state.auth,
+    profile: state.profile.profile,
+    error: state.profile.error,
+    loading: state.profile.loading,
+  };
+};
+
+const connector = connect(mapStateToProps, { getProfileById });
+type Props = ConnectedProps<typeof connector> &
+  RouteChildrenProps<{ id: string }>;
+
+export default connector(Profile);

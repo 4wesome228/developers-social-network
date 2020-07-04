@@ -43,6 +43,7 @@ export const authReducer = (
         error: action.payload,
       };
     case "LOGOUT":
+    case "DELETE_ACCOUNT_SUCCESS":
       localStorage.removeItem("token");
       return { ...state, isAuth: false, loading: false, token: null };
     case "USER_LOADED":
@@ -52,6 +53,9 @@ export const authReducer = (
         loading: false,
         user: action.payload,
       };
+    case "DELETE_ACCOUNT_FAILURE": {
+      return { ...state, error: action.payload };
+    }
     default:
       return state;
   }

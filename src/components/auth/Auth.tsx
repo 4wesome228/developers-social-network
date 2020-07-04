@@ -4,6 +4,7 @@ import { RouteComponentProps, Link, Redirect } from "react-router-dom";
 import { IFormData, connector, PropsFromRedux } from "./types";
 import Spinner from "../spinner/Spinner";
 import fieldsConfig from "../../utils/auth-fields";
+import { ALERT_TYPE } from "../../store/actions/alert";
 
 const Auth: React.FC<RouteComponentProps & PropsFromRedux> = ({
   match: { path },
@@ -43,7 +44,7 @@ const Auth: React.FC<RouteComponentProps & PropsFromRedux> = ({
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (password !== repeated_password && !isLogin) {
-      thunkSetAlert("Passwords do not match", "danger");
+      thunkSetAlert("Passwords do not match", ALERT_TYPE.danger);
     } else {
       /*else if (Object.keys(formData).some((k) => formData[k] == "")) {
       for (let key in formData) {

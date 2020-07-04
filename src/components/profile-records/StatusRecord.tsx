@@ -5,7 +5,13 @@ export default (props: StatusRecordProps) => {
   const { onChange, value } = props;
   return (
     <div className="form-group">
-      <select name="status" value={value} onChange={onChange}>
+      <select
+        name="status"
+        value={value}
+        onChange={(e) => {
+          onChange(e);
+        }}
+      >
         <option value="0">* Select Professional Status</option>
         <option value="Developer">Developer</option>
         <option value="Junior Developer">Junior Developer</option>

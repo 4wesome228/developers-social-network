@@ -8,8 +8,9 @@ import {
   ILoginPayload,
 } from "./types";
 
-import { thunkSetAlert } from "./alert";
+import { thunkSetAlert, ALERT_TYPE } from "./alert";
 import setAuthToken from "../../utils/setAuthToken";
+import { clearProfile } from "./profile";
 
 export const register = ({
   name,
@@ -30,7 +31,7 @@ export const register = ({
   } catch (error) {
     const errors = error.response.data.errors;
     errors.forEach((error) => {
-      dispatch(thunkSetAlert(error.msg, "danger"));
+      dispatch(thunkSetAlert(error.msg, ALERT_TYPE.danger));
     });
 
     dispatch(actions.registerFail(error.message));
@@ -55,7 +56,7 @@ export const login = ({
   } catch (error) {
     const errors = error.response.data.errors;
     errors.forEach((error) => {
-      dispatch(thunkSetAlert(error.msg, "danger"));
+      dispatch(thunkSetAlert(error.msg, ALERT_TYPE.danger));
     });
 
     dispatch(actions.loginFail(error.message));
@@ -75,6 +76,20 @@ export const loadUserThunk = (): AppThunk<AuthActionTypes> => async (
   }
 };
 
+export const deleteAccount = () => async (dispatch) => {
+  try {
+    const res = await axios.delete<{ msg: string }>("/api/profile");
+    if (res.data.msg === "User deleted") {
+      dispatch(clearProfile());
+      dispatch(actions.deleteAccountSuccess());
+    }
+
+    dispatch(thunkSetAlert("Account deleted successefuly", ALERT_TYPE.success));
+  } catch (error) {
+    dispatch(actions.deleteAccountFailure(error.message));
+  }
+};
+
 const actions = {
   registerRequest: () => ({ type: "FETCH_REGISTER_REQUEST" } as const),
   registerSuccess: (token: string) =>
@@ -90,6 +105,9 @@ const actions = {
   loginFail: (error: string) =>
     ({ type: "FETCH_LOGIN_FAILURE", payload: error } as const),
   logout: () => ({ type: "LOGOUT" } as const),
+  deleteAccountSuccess: () => ({ type: "DELETE_ACCOUNT_SUCCESS" } as const),
+  deleteAccountFailure: (error: string) =>
+    ({ type: "DELETE_ACCOUNT_FAILURE", payload: error } as const),
 };
 
 export const logout = actions.logout;

@@ -149,7 +149,7 @@ router.put("/unlike/:id", auth, async (req, res) => {
     post.likes = newLikes;
     await post.save();
 
-    res.json(likes);
+    res.json(newLikes);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
