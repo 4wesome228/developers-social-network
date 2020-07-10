@@ -5,25 +5,25 @@ module.exports = {
   mode: "development",
   devtool: "source-map",
   target: "web",
-  entry: path.join(__dirname, "/src/index.tsx"),
+  entry: path.join(__dirname, "client", "src", "index.tsx"),
   output: {
-    publicPath:"/",
-    path: path.join(__dirname, "/dist"),
-    filename: "bundle.js"
+    publicPath: "/",
+    path: path.join(__dirname, "client", "dist"),
+    filename: "bundle.js",
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js"]
+    extensions: [".ts", ".tsx", ".js"],
   },
   module: {
     rules: [
       {
         test: /\.tsx|ts$/,
         loader: "awesome-typescript-loader",
-        exclude: [/node_modules/]
+        exclude: [/node_modules/],
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
@@ -34,36 +34,35 @@ module.exports = {
             options: {
               mozjpeg: {
                 progressive: true,
-                quality: 65
-              }
-            }
-          }
-        ]
-      }
-    ]
+                quality: 65,
+              },
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template:"./src/public/index.html",
-      inject: "body"
-    })
+      template: path.join("client", "src", "public", "index.html"),
+      inject: "body",
+    }),
   ],
   devServer: {
-    writeToDisk:true,
-    contentBase: "./src/public",
+    writeToDisk: true,
+    contentBase: path.join("client", "src", "public"),
     historyApiFallback: true,
     port: 8080,
-     proxy: {
-      "/profile/api":{
+    proxy: {
+      "/profile/api": {
         target: "http://localhost:5000",
-        pathRewrite:{
-          "/profile":""
-        }
+        pathRewrite: {
+          "/profile": "",
+        },
       },
-      '/api': {
+      "/api": {
         target: "http://localhost:5000",
-    },  
-     }
-      
-  }
+      },
+    },
+  },
 };

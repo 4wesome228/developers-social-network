@@ -1,3 +1,4 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
@@ -9,7 +10,7 @@ module.exports = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, config.get("jwtToken"));
+    const decoded = jwt.verify(token, process.env.jwtToken);
     req.user = decoded.user;
     next();
   } catch (error) {

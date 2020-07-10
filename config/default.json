@@ -1,4 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://maks:maks@mern-xvtul.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtToken": "secret-token"
-}
